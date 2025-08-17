@@ -4,6 +4,10 @@ description = "A tool for analyzing and visualizing technology stacks in codes."
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "tech_scan"
+path = "src/lib.rs"
+
 [[bin]]
 name = "tech-scan"
 path = "src/main.rs"
