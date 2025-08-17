@@ -1,32 +1,25 @@
-use clap::Parser;
-use walkdir::WalkDir;
+mod cli;
+mod entity;
+mod service;
 
-#[derive(Parser)]
-#[command(name = "tech-scan")]
-#[command(about = "A tool for analyzing and visualizing technology stacks in codes.")]
-struct Cli {
-    dir: String,
-}
+use crate::cli::Cli;
+use crate::service::scanner::scan_dir;
 
 fn main() {
-    let cli = Cli::parse();
+    let cli = Cli::new();
 
     println!("Processing directory: {}", cli.dir);
 
-    let entries = WalkDir::new(&cli.dir);
-    for entry in entries {
-        match entry {
-            Ok(entry) => {
-                let file_type = entry.file_type();
-                let path = entry.path();
-
-                if file_type.is_file() {
-                    println!("{}", &path.to_string_lossy());
-                }
+    let files = scan_dir(&cli.dir);
+    match files {
+        Ok(files) => {
+            for file in files {
+                println!("{} - {} ({}B)", file.name, file.path, file.size);
             }
-            Err(e) => {
-                eprintln!("Error reading entry: {}", e);
-            }
+        }
+        Err(e) => {
+            eprintln!("Error scanning directory: {}", e);
+            std::process::exit(1);
         }
     }
 }

@@ -161,7 +161,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tech-scan"
+name = "tech_scan"
 version = "0.1.0"
 dependencies = [
  "clap",
