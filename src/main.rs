@@ -3,29 +3,35 @@ mod entity;
 mod service;
 
 use crate::cli::Cli;
-use crate::service::scanner::scan_dir;
+use crate::service::scanner::Scanner;
+use crate::service::scanner_options::ScannerOptions;
 
 fn main() {
     let cli = Cli::new();
 
-    println!("Processing directory: {}", cli.dir);
+    let opts = ScannerOptions {
+        exclude: cli.exclude.unwrap_or_default(),
+    };
 
-    let files = scan_dir(&cli.dir);
-    match files {
-        Ok(files) => {
-            for file in files {
-                println!(
-                    "{} ({}) ({}) ({} B)",
-                    file.path,
-                    file.name,
-                    file.ext.unwrap_or_default(),
-                    file.size
-                );
-            }
-        }
-        Err(e) => {
-            eprintln!("Error scanning directory: {}", e);
-            std::process::exit(1);
-        }
+    let scanner = Scanner::new(cli.dir.clone(), Some(opts)).unwrap_or_else(|e| {
+        eprintln!("Error initializing scanner: {}", e);
+        std::process::exit(1);
+    });
+
+    println!("Processing directory: {}", &cli.dir);
+
+    let files = scanner.scan().unwrap_or_else(|e| {
+        eprintln!("Error scanning directory: {}", e);
+        std::process::exit(1);
+    });
+
+    for file in files {
+        println!(
+            "{} ({}) ({}) ({} B)",
+            file.path,
+            file.name,
+            file.ext.unwrap_or_default(),
+            file.size
+        );
     }
 }

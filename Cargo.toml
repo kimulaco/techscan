@@ -14,4 +14,4 @@ path = "src/main.rs"
 
 [dependencies]
 clap = {version = "4.5.43", features = ["derive"]}
-walkdir = "2.5.0"
+ignore = "0.4.23"

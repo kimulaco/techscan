@@ -1,5 +1,6 @@
 use std::io;
-use walkdir::DirEntry;
+use std::fs;
+use ignore::DirEntry;
 
 pub struct File {
     pub path: String,
@@ -25,7 +26,7 @@ impl File {
             path: path.to_string_lossy().into_owned(),
             name,
             ext: path.extension().and_then(|s| s.to_str()).map(|s| s.to_string()),
-            size: entry.metadata()?.len(),
+            size: fs::metadata(path)?.len(),
         })
     }
 }
