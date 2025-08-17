@@ -1,10 +1,10 @@
 mod cli;
 mod entity;
 mod service;
+mod config;
 
 use crate::cli::Cli;
-use crate::service::scanner::Scanner;
-use crate::service::scanner_options::ScannerOptions;
+use crate::service::{Scanner, ScannerOptions, Reporter};
 
 fn main() {
     let cli = Cli::new().unwrap_or_else(|e| {
@@ -28,13 +28,13 @@ fn main() {
         std::process::exit(1);
     });
 
-    for file in files {
-        println!(
-            "{} ({}) ({}) ({} B)",
-            file.path,
-            file.name,
-            file.ext.unwrap_or_default(),
-            file.size
-        );
-    }
+    let reporter = Reporter::new(cli.dir.clone()).unwrap_or_else(|e| {
+        eprintln!("Error initializing reporter: {}", e);
+        std::process::exit(1);
+    });
+
+    let report = reporter.create(files);
+
+    let json_pretty = serde_json::to_string_pretty(&report).unwrap();
+    println!("{}", json_pretty);
 }

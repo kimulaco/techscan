@@ -661,6 +661,7 @@ dependencies = [
  "config",
  "ignore",
  "serde",
+ "serde_json",
 ]
 
 [[package]]

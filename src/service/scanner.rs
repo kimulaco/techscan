@@ -1,8 +1,8 @@
 use std::io;
 use std::path::Path;
 use ignore::{overrides::OverrideBuilder, Walk, WalkBuilder};
-use crate::entity::file::File;
-use crate::service::scanner_options::ScannerOptions;
+use crate::entity::File;
+use crate::service::ScannerOptions;
 
 const GLOBAL_EXCLUDE_PATH: [&str; 2] = [".git", ".DS_Store"];
 
