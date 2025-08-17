@@ -1,0 +1,5 @@
+exclude = [
+  "*.lock",
+  "*.toml",
+  "*.yaml"
+]

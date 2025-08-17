@@ -7,7 +7,10 @@ use crate::service::scanner::Scanner;
 use crate::service::scanner_options::ScannerOptions;
 
 fn main() {
-    let cli = Cli::new();
+    let cli = Cli::new().unwrap_or_else(|e| {
+        eprintln!("Failed initializing CLI: {}", e);
+        std::process::exit(1);
+    });
 
     let opts = ScannerOptions {
         exclude: cli.exclude.unwrap_or_default(),

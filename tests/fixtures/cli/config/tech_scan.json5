@@ -1,0 +1,8 @@
+{
+  // exclude patterns
+  "exclude": [
+    "*.lock",
+    "*.toml",
+    "*.yaml"
+  ]
+}
