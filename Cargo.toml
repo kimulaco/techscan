@@ -2,7 +2,8 @@
 name = "tech_scan"
 description = "A tool for analyzing and visualizing technology stacks in codes."
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
+rust-version = "1.70"
 
 [lib]
 name = "tech_scan"
