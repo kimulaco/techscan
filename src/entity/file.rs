@@ -2,8 +2,9 @@ use std::io;
 use walkdir::DirEntry;
 
 pub struct File {
-    pub name: String,
     pub path: String,
+    pub name: String,
+    pub ext: Option<String>,
     pub size: u64,
 }
 
@@ -21,8 +22,9 @@ impl File {
             .into_owned();
 
         Ok(File {
-            name,
             path: path.to_string_lossy().into_owned(),
+            name,
+            ext: path.extension().and_then(|s| s.to_str()).map(|s| s.to_string()),
             size: entry.metadata()?.len(),
         })
     }

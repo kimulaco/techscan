@@ -14,7 +14,13 @@ fn main() {
     match files {
         Ok(files) => {
             for file in files {
-                println!("{} - {} ({}B)", file.name, file.path, file.size);
+                println!(
+                    "{} ({}) ({}) ({} B)",
+                    file.path,
+                    file.name,
+                    file.ext.unwrap_or_default(),
+                    file.size
+                );
             }
         }
         Err(e) => {
