@@ -102,7 +102,7 @@ mod tests {
 
         let files = scanner.scan().expect("Scanning should succeed");
 
-        let extensions: HashSet<_> = files.iter().filter_map(|f| f.ext.as_ref()).collect();
+        let extensions: HashSet<&str> = files.iter().filter_map(|f| f.ext.as_deref()).collect();
 
         let expected_extensions = [
             "rs", "js", "ts", "jsx", "tsx", "py", "rb", "go", "c", "cpp", "cc", "cxx", "php",
@@ -112,7 +112,7 @@ mod tests {
 
         for ext in expected_extensions.iter() {
             assert!(
-                extensions.contains(&ext.to_string()),
+                extensions.contains(ext),
                 "Expected extension '{}' not found in scanned files",
                 ext
             );
