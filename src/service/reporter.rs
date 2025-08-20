@@ -1,7 +1,7 @@
-use std::io;
-use std::collections::HashMap;
-use crate::entity::{File, Report, LanguageReport};
 use crate::config::LanguageConfig;
+use crate::entity::{File, LanguageReport, Report};
+use std::collections::HashMap;
+use std::io;
 
 pub struct Reporter {
     dir: String,
@@ -19,7 +19,10 @@ impl Reporter {
             if let Some(ext) = &file.ext {
                 let ext_lower = ext.to_lowercase();
                 if let Some(language) = LanguageConfig::detect_language(&ext_lower) {
-                    language_data.entry(language.name.to_string()).or_default().push(file.path.clone());
+                    language_data
+                        .entry(language.name.to_string())
+                        .or_default()
+                        .push(file.path.clone());
                 }
             }
         }
@@ -43,5 +46,4 @@ impl Reporter {
             languages,
         }
     }
-
 }

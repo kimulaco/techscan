@@ -1,10 +1,10 @@
 mod cli;
+mod config;
 mod entity;
 mod service;
-mod config;
 
 use crate::cli::Cli;
-use crate::service::{Scanner, ScannerOptions, Reporter};
+use crate::service::{Reporter, Scanner, ScannerOptions};
 
 fn main() {
     let cli = Cli::new().unwrap_or_else(|e| {

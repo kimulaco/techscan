@@ -62,7 +62,7 @@ const CSS: Language = Language {
 
 const SCSS: Language = Language {
     name: "SCSS",
-    exts: &["scss"]
+    exts: &["scss"],
 };
 
 const JSON: Language = Language {
@@ -86,36 +86,23 @@ const MARKDOWN: Language = Language {
 };
 
 const SUPPORTER_LANGUAGES: &[Language] = &[
-    RUST,
-    JAVASCRIPT,
-    TYPESCRIPT,
-    PYTHON,
-    JAVA,
-    C,
-    CPP,
-    GO,
-    RUBY,
-    PHP,
-    HTML,
-    CSS,
-    SCSS,
-    JSON,
-    TOML,
-    YAML,
-    MARKDOWN,
+    RUST, JAVASCRIPT, TYPESCRIPT, PYTHON, JAVA, C, CPP, GO, RUBY, PHP, HTML, CSS, SCSS, JSON, TOML,
+    YAML, MARKDOWN,
 ];
 
 pub struct LanguageConfig;
 
 impl LanguageConfig {
     pub fn detect_language(ext: &str) -> Option<Language> {
-        SUPPORTER_LANGUAGES.iter()
+        SUPPORTER_LANGUAGES
+            .iter()
             .find(|lang| lang.exts.contains(&ext))
             .copied()
     }
 
     pub fn get_language_by_name(name: &str) -> Option<Language> {
-        SUPPORTER_LANGUAGES.iter()
+        SUPPORTER_LANGUAGES
+            .iter()
             .find(|lang| lang.name == name)
             .copied()
     }

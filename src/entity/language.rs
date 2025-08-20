@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Language {
@@ -69,7 +69,8 @@ mod tests {
             };
 
             let json = serde_json::to_string_pretty(&lang).unwrap();
-            let expected = "{\n  \"name\": \"HTML\",\n  \"exts\": [\n    \"html\",\n    \"htm\"\n  ]\n}";
+            let expected =
+                "{\n  \"name\": \"HTML\",\n  \"exts\": [\n    \"html\",\n    \"htm\"\n  ]\n}";
 
             assert_eq!(json, expected);
         }
