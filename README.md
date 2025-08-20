@@ -8,7 +8,7 @@
 
 ### Required
 
-- **Rust**: >= 1.70
+- **Rust**: >= 1.82.0
 
 ### Build & Debug
 
