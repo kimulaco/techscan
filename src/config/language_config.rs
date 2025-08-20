@@ -120,3 +120,58 @@ impl LanguageConfig {
             .copied()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    mod detect_language {
+        use super::*;
+
+        #[test]
+        fn should_detect_rust() {
+            let result = LanguageConfig::detect_language("rs");
+            assert!(result.is_some());
+            assert_eq!(result.unwrap().name, "Rust");
+        }
+
+        #[test]
+        fn should_detect_multiple_variants() {
+            let extensions = ["ts", "mts", "cts", "tsx"];
+            for ext in extensions {
+                let result = LanguageConfig::detect_language(ext);
+                assert!(result.is_some());
+                assert_eq!(result.unwrap().name, "TypeScript");
+            }
+        }
+
+        #[test]
+        fn should_return_none_for_unsupported_extension() {
+            let result = LanguageConfig::detect_language("xyz");
+            assert!(result.is_none());
+        }
+
+        #[test]
+        fn should_return_none_for_empty_extension() {
+            let result = LanguageConfig::detect_language("");
+            assert!(result.is_none());
+        }
+    }
+
+    mod get_language_by_name {
+        use super::*;
+
+        #[test]
+        fn should_return_language_when_found() {
+            let result = LanguageConfig::get_language_by_name("Rust");
+            assert!(result.is_some());
+            assert_eq!(result.unwrap().name, "Rust");
+        }
+
+        #[test]
+        fn should_return_none_when_not_found() {
+            let result = LanguageConfig::get_language_by_name("UnknownLanguage");
+            assert!(result.is_none());
+        }
+    }
+}
