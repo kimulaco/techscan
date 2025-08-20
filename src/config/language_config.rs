@@ -1,5 +1,10 @@
 use crate::entity::Language;
 
+const SHELL: Language = Language {
+    name: "Shell",
+    exts: &["sh"],
+};
+
 const RUST: Language = Language {
     name: "Rust",
     exts: &["rs"],
@@ -62,32 +67,11 @@ const CSS: Language = Language {
 
 const SCSS: Language = Language {
     name: "SCSS",
-    exts: &["scss"],
-};
-
-const JSON: Language = Language {
-    name: "JSON",
-    exts: &["json", "json5"],
-};
-
-const TOML: Language = Language {
-    name: "TOML",
-    exts: &["toml"],
-};
-
-const YAML: Language = Language {
-    name: "YAML",
-    exts: &["yaml", "yml"],
-};
-
-const MARKDOWN: Language = Language {
-    name: "Markdown",
-    exts: &["md", "mdx"],
+    exts: &["scss", "sass"],
 };
 
 const SUPPORTER_LANGUAGES: &[Language] = &[
-    RUST, JAVASCRIPT, TYPESCRIPT, PYTHON, JAVA, C, CPP, GO, RUBY, PHP, HTML, CSS, SCSS, JSON, TOML,
-    YAML, MARKDOWN,
+    SHELL, RUST, JAVASCRIPT, TYPESCRIPT, PYTHON, JAVA, C, CPP, GO, RUBY, PHP, HTML, CSS, SCSS,
 ];
 
 pub struct LanguageConfig;

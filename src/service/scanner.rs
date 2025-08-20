@@ -89,3 +89,86 @@ impl Scanner {
         Ok(entries)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::HashSet;
+
+    #[test]
+    fn test_scan_cli_fixture() {
+        let scanner = Scanner::new("tests/fixtures/cli".to_string(), None)
+            .expect("Scanner creation should succeed for existing directory");
+
+        let files = scanner.scan().expect("Scanning should succeed");
+
+        let extensions: HashSet<_> = files
+            .iter()
+            .filter_map(|f| f.ext.as_ref())
+            .collect();
+
+        let expected_extensions = [
+            "rs", "js", "ts", "jsx", "tsx", "py", "rb", "go",
+            "c", "cpp", "cc", "cxx", "php", "html", "htm",
+            "css", "sass", "scss", "sh", "json", "json5",
+            "toml", "yaml", "yml", "cjs", "mjs", "cts", "mts"
+        ];
+
+        for ext in expected_extensions.iter() {
+            assert!(
+                extensions.contains(&ext.to_string()),
+                "Expected extension '{}' not found in scanned files",
+                ext
+            );
+        }
+
+        // ファイル数の確認（適切な数のファイルがスキャンされていること）
+        assert!(files.len() == 28, "Expected 28 files, got {}", files.len());
+    }
+
+    #[test]
+    #[should_panic(expected = "Directory does not exist")]
+    fn test_scanner_nonexistent_directory() {
+        Scanner::new("nonexistent/directory".to_string(), None)
+            .expect("This should panic");
+    }
+
+    #[test]
+    fn test_scan_with_exclude_pattern() {
+        let opts = ScannerOptions {
+            exclude: vec!["*.rs".to_string()],
+        };
+
+        let scanner = Scanner::new("tests/fixtures/cli".to_string(), Some(opts))
+            .expect("Scanner creation should succeed");
+
+        let files = scanner.scan().expect("Scanning should succeed");
+
+        let has_rust_files = files.iter().any(|f| f.ext.as_ref() == Some(&"rs".to_string()));
+        assert!(!has_rust_files, "Rust files should be excluded");
+
+        let has_js_files = files.iter().any(|f| f.ext.as_ref() == Some(&"js".to_string()));
+        assert!(has_js_files, "JavaScript files should be included");
+    }
+
+    #[test]
+    fn test_scan_with_multiple_exclude_patterns() {
+        let opts = ScannerOptions {
+            exclude: vec!["*.rs".to_string(), "*.js".to_string(), "*.rb".to_string()],
+        };
+
+        let scanner = Scanner::new("tests/fixtures/cli".to_string(), Some(opts))
+            .expect("Scanner creation should succeed");
+
+        let files = scanner.scan().expect("Scanning should succeed");
+
+        let excluded_extensions = ["rs", "js", "rb"];
+        for ext in excluded_extensions.iter() {
+            let has_files = files.iter().any(|f| f.ext.as_ref() == Some(&ext.to_string()));
+            assert!(!has_files, "Files with extension '{}' should be excluded", ext);
+        }
+
+        let has_python_files = files.iter().any(|f| f.ext.as_ref() == Some(&"py".to_string()));
+        assert!(has_python_files, "Python files should be included");
+    }
+}
