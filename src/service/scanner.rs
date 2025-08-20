@@ -102,16 +102,12 @@ mod tests {
 
         let files = scanner.scan().expect("Scanning should succeed");
 
-        let extensions: HashSet<_> = files
-            .iter()
-            .filter_map(|f| f.ext.as_ref())
-            .collect();
+        let extensions: HashSet<_> = files.iter().filter_map(|f| f.ext.as_ref()).collect();
 
         let expected_extensions = [
-            "rs", "js", "ts", "jsx", "tsx", "py", "rb", "go",
-            "c", "cpp", "cc", "cxx", "php", "html", "htm",
-            "css", "sass", "scss", "sh", "json", "json5",
-            "toml", "yaml", "yml", "cjs", "mjs", "cts", "mts"
+            "rs", "js", "ts", "jsx", "tsx", "py", "rb", "go", "c", "cpp", "cc", "cxx", "php",
+            "html", "htm", "css", "sass", "scss", "sh", "json", "json5", "toml", "yaml", "yml",
+            "cjs", "mjs", "cts", "mts",
         ];
 
         for ext in expected_extensions.iter() {
@@ -129,8 +125,7 @@ mod tests {
     #[test]
     #[should_panic(expected = "Directory does not exist")]
     fn test_scanner_nonexistent_directory() {
-        Scanner::new("nonexistent/directory".to_string(), None)
-            .expect("This should panic");
+        Scanner::new("nonexistent/directory".to_string(), None).expect("This should panic");
     }
 
     #[test]
@@ -144,10 +139,14 @@ mod tests {
 
         let files = scanner.scan().expect("Scanning should succeed");
 
-        let has_rust_files = files.iter().any(|f| f.ext.as_ref() == Some(&"rs".to_string()));
+        let has_rust_files = files
+            .iter()
+            .any(|f| f.ext.as_ref() == Some(&"rs".to_string()));
         assert!(!has_rust_files, "Rust files should be excluded");
 
-        let has_js_files = files.iter().any(|f| f.ext.as_ref() == Some(&"js".to_string()));
+        let has_js_files = files
+            .iter()
+            .any(|f| f.ext.as_ref() == Some(&"js".to_string()));
         assert!(has_js_files, "JavaScript files should be included");
     }
 
@@ -164,11 +163,19 @@ mod tests {
 
         let excluded_extensions = ["rs", "js", "rb"];
         for ext in excluded_extensions.iter() {
-            let has_files = files.iter().any(|f| f.ext.as_ref() == Some(&ext.to_string()));
-            assert!(!has_files, "Files with extension '{}' should be excluded", ext);
+            let has_files = files
+                .iter()
+                .any(|f| f.ext.as_ref() == Some(&ext.to_string()));
+            assert!(
+                !has_files,
+                "Files with extension '{}' should be excluded",
+                ext
+            );
         }
 
-        let has_python_files = files.iter().any(|f| f.ext.as_ref() == Some(&"py".to_string()));
+        let has_python_files = files
+            .iter()
+            .any(|f| f.ext.as_ref() == Some(&"py".to_string()));
         assert!(has_python_files, "Python files should be included");
     }
 }
