@@ -4,11 +4,19 @@ mod entity;
 mod service;
 
 use crate::cli::Cli;
+use crate::config::REPORTER_FORMAT_JSON;
 use crate::service::{Reporter, Scanner, ScannerOptions};
 
 fn main() {
     let cli = Cli::new().unwrap_or_else(|e| {
         eprintln!("Failed initializing CLI: {}", e);
+        std::process::exit(1);
+    });
+
+    let reporter_format = cli.reporter.as_deref().unwrap_or(REPORTER_FORMAT_JSON);
+
+    Reporter::validate_format(reporter_format).unwrap_or_else(|e| {
+        eprintln!("Error: {}", e);
         std::process::exit(1);
     });
 
@@ -28,13 +36,14 @@ fn main() {
         std::process::exit(1);
     });
 
-    let reporter = Reporter::new(cli.dir.clone()).unwrap_or_else(|e| {
-        eprintln!("Error initializing reporter: {}", e);
-        std::process::exit(1);
-    });
+    let report = scanner.analyze(files);
 
-    let report = reporter.create(files);
+    let reporter = Reporter::new();
 
-    let json_pretty = serde_json::to_string_pretty(&report).unwrap();
-    println!("{}", json_pretty);
+    reporter
+        .output(&report, reporter_format)
+        .unwrap_or_else(|e| {
+            eprintln!("Error outputting report: {}", e);
+            std::process::exit(1);
+        });
 }

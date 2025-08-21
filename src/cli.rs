@@ -16,6 +16,9 @@ pub struct Cli {
     )]
     pub exclude: Option<Vec<String>>,
 
+    #[arg(short, long, help = "Output format [default: json]")]
+    pub reporter: Option<String>,
+
     #[arg(short, long, help = "Config file path")]
     pub config: Option<String>,
 }
@@ -23,6 +26,7 @@ pub struct Cli {
 #[derive(Deserialize, Default)]
 pub struct AppConfig {
     pub exclude: Option<Vec<String>>,
+    pub reporter: Option<String>,
 }
 
 impl Cli {
@@ -34,6 +38,10 @@ impl Cli {
 
             if cli.exclude.is_none() && config_data.exclude.is_some() {
                 cli.exclude = config_data.exclude;
+            }
+
+            if cli.reporter.is_none() && config_data.reporter.is_some() {
+                cli.reporter = config_data.reporter;
             }
         }
 
