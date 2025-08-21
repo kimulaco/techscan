@@ -1,6 +1,8 @@
-use crate::config::REPORTER_FORMAT_JSON;
+use crate::config::{REPORTER_FORMAT_JSON, REPORTER_FORMAT_TABLE};
 use crate::entity::Report;
 use std::io;
+use tabled::builder::Builder;
+use tabled::settings::{object::Rows, Alignment, Modify, Style};
 
 pub struct Reporter;
 
@@ -17,10 +19,10 @@ impl Reporter {
 
     pub fn validate_format(format: &str) -> io::Result<()> {
         match format {
-            REPORTER_FORMAT_JSON => Ok(()),
+            REPORTER_FORMAT_JSON | REPORTER_FORMAT_TABLE => Ok(()),
             _ => Err(io::Error::other(format!(
-                "Unsupported reporter format: '{}'. Only '{}' is supported.",
-                format, REPORTER_FORMAT_JSON,
+                "Unsupported reporter format: '{}'. Supported formats: {}, {}.",
+                format, REPORTER_FORMAT_TABLE, REPORTER_FORMAT_JSON
             ))),
         }
     }
@@ -30,6 +32,7 @@ impl Reporter {
 
         let output_string = match format {
             REPORTER_FORMAT_JSON => self.to_json(report)?,
+            REPORTER_FORMAT_TABLE => self.to_table(report)?,
             _ => unreachable!("Format validation should have caught this"),
         };
 
@@ -40,6 +43,55 @@ impl Reporter {
     fn to_json(&self, report: &Report) -> io::Result<String> {
         serde_json::to_string_pretty(report)
             .map_err(|e| io::Error::other(format!("JSON serialization error: {}", e)))
+    }
+
+    fn to_table(&self, report: &Report) -> io::Result<String> {
+        let mut output = Vec::new();
+
+        let mut summary_builder = Builder::default();
+        summary_builder.push_record(vec!["Item", "Value"]);
+        summary_builder.push_record(vec!["Directory", &report.dir]);
+        summary_builder.push_record(vec!["Total Files", &report.total_file_count.to_string()]);
+
+        let summary_table = summary_builder
+            .build()
+            .with(Style::sharp())
+            .with(Modify::new(Rows::new(0..=0)).with(Alignment::center()))
+            .to_string();
+
+        let mut lang_builder = Builder::default();
+        lang_builder.push_record(vec!["Language", "Files", "Percentage"]);
+
+        for lang_report in &report.languages {
+            let percentage =
+                (lang_report.file_count as f64 / report.total_file_count as f64) * 100.0;
+            lang_builder.push_record(vec![
+                lang_report.language.name,
+                &lang_report.file_count.to_string(),
+                &format!("{:.1}%", percentage),
+            ]);
+        }
+
+        lang_builder.push_record(vec![
+            "Total",
+            &report.total_file_count.to_string(),
+            "100.0%",
+        ]);
+
+        let last_row = report.languages.len() + 1; // +1 for header
+        let lang_table = lang_builder
+            .build()
+            .with(Style::sharp())
+            .with(Modify::new(Rows::new(last_row..=last_row)).with(Alignment::center()))
+            .to_string();
+
+        output.push("=== Scan Summary ===".to_string());
+        output.push(summary_table);
+        output.push(String::new());
+        output.push("=== Language Statistics ===".to_string());
+        output.push(lang_table);
+
+        Ok(output.join("\n"))
     }
 }
 
@@ -69,7 +121,7 @@ mod tests {
 
     #[test]
     fn test_validate_format_valid() {
-        assert!(Reporter::validate_format("json").is_ok());
+        assert!(Reporter::validate_format("table").is_ok());
     }
 
     #[test]
@@ -80,7 +132,7 @@ mod tests {
         let error_msg = result.unwrap_err().to_string();
         assert_eq!(
             error_msg,
-            "Unsupported reporter format: 'xml'. Only 'json' is supported."
+            "Unsupported reporter format: 'xml'. Supported formats: table, json."
         );
     }
 

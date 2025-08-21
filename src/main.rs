@@ -4,7 +4,7 @@ mod entity;
 mod service;
 
 use crate::cli::Cli;
-use crate::config::REPORTER_FORMAT_JSON;
+use crate::config::REPORTER_FORMAT_TABLE;
 use crate::service::{Reporter, Scanner, ScannerOptions};
 
 fn main() {
@@ -13,7 +13,7 @@ fn main() {
         std::process::exit(1);
     });
 
-    let reporter_format = cli.reporter.as_deref().unwrap_or(REPORTER_FORMAT_JSON);
+    let reporter_format = cli.reporter.as_deref().unwrap_or(REPORTER_FORMAT_TABLE);
 
     Reporter::validate_format(reporter_format).unwrap_or_else(|e| {
         eprintln!("Error: {}", e);

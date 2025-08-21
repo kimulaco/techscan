@@ -16,7 +16,7 @@ pub struct Cli {
     )]
     pub exclude: Option<Vec<String>>,
 
-    #[arg(short, long, help = "Output format [default: json]")]
+    #[arg(short, long, help = "Output format: table, json [default: table]")]
     pub reporter: Option<String>,
 
     #[arg(short, long, help = "Config file path")]
