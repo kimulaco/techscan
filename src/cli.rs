@@ -3,7 +3,7 @@ use config::{Config, ConfigError, File};
 use serde::Deserialize;
 
 #[derive(Parser)]
-#[command(name = "tech-scan")]
+#[command(name = "techscan")]
 #[command(about = "A tool for analyzing and visualizing technology stacks in codes.")]
 pub struct Cli {
     #[arg(help = "Directory path to scan")]

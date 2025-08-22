@@ -723,7 +723,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tech_scan"
+name = "techscan"
 version = "0.1.0-beta.1"
 dependencies = [
  "clap",

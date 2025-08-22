@@ -1,15 +1,15 @@
 [package]
-name = "tech_scan"
+name = "techscan"
 description = "A tool for analyzing and visualizing technology stacks in codes."
 version = "0.1.0-beta.1"
 edition = "2021"
 rust-version = "1.82.0"
 license = "MIT"
-repository = "https://github.com/kimulaco/tech-scan"
+repository = "https://github.com/kimulaco/techscan"
 readme = "README.md"
 
 [[bin]]
-name = "tech-scan"
+name = "techscan"
 path = "src/main.rs"
 
 [dependencies]

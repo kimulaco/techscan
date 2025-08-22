@@ -1,17 +1,17 @@
-# tech-scan
+# techscan
 
-`tech-scan` is a Rust CLI tool for analyzing and visualizing technology stacks in a directory.
+`techscan` is a Rust CLI tool for analyzing and visualizing technology stacks in a directory.
 
 ## Usage
 
 ### Cargo
 
 ```bash
-# Install tech-scan
-cargo install tech-scan
+# Install techscan
+cargo install techscan
 
-# Run tech-scan
-tech-scan ./project
+# Run techscan
+techscan ./project
 
 === Scan Summary ===
 ┌─────────────┬────────────────────┐
@@ -55,19 +55,19 @@ tech-scan ./project
 
 ```bash
 # Basic scan with table output (default)
-tech-scan ./project
+techscan ./project
 
 # JSON format output
-tech-scan ./project --reporter json
+techscan ./project --reporter json
 
 # Exclude specific file patterns
-tech-scan ./project --exclude "*.test.ts" --exclude "node_modules"
+techscan ./project --exclude "*.test.ts" --exclude "node_modules"
 
 # Multiple excludes with short option
-tech-scan ./project -e "*.test.ts" -e "*.spec.ts" -e "dist"
+techscan ./project -e "*.test.ts" -e "*.spec.ts" -e "dist"
 
 # Combined options
-tech-scan ./project --reporter json --exclude "*.test.*"
+techscan ./project --reporter json --exclude "*.test.*"
 ```
 
 ## Development
