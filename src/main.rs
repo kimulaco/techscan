@@ -5,7 +5,8 @@ mod service;
 
 use crate::cli::Cli;
 use crate::config::REPORTER_FORMAT_TABLE;
-use crate::service::{Reporter, Scanner, ScannerOptions};
+use crate::entity::ScannerOptions;
+use crate::service::{Reporter, Scanner};
 
 fn main() {
     let cli = Cli::new().unwrap_or_else(|e| {

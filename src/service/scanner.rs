@@ -1,6 +1,6 @@
 use crate::config::LanguageConfig;
-use crate::entity::{File, LanguageReport, Report};
-use crate::service::ScannerOptions;
+use crate::entity::ScannerOptions;
+use crate::entity::{File, ScannerLanguage, ScannerReport};
 use ignore::{overrides::OverrideBuilder, Walk, WalkBuilder};
 use std::collections::HashMap;
 use std::io;
@@ -53,7 +53,7 @@ impl Scanner {
         Ok(files)
     }
 
-    pub fn analyze(&self, files: Vec<File>) -> Report {
+    pub fn analyze(&self, files: Vec<File>) -> ScannerReport {
         let mut language_data: HashMap<String, Vec<String>> = HashMap::new();
 
         for file in &files {
@@ -71,7 +71,7 @@ impl Scanner {
         let mut languages = Vec::new();
         for (lang_name, file_paths) in language_data {
             if let Some(language) = LanguageConfig::get_language_by_name(&lang_name) {
-                languages.push(LanguageReport {
+                languages.push(ScannerLanguage {
                     language,
                     file_count: file_paths.len() as u64,
                     file_paths,
@@ -81,7 +81,7 @@ impl Scanner {
 
         languages.sort_by(|a, b| b.file_count.cmp(&a.file_count));
 
-        Report {
+        ScannerReport {
             dir: self.dir.clone(),
             total_file_count: files.len() as u64,
             languages,
