@@ -1,33 +1,8 @@
 use crate::entity::Language;
 
-const SHELL: Language = Language {
-    name: "Shell",
-    exts: &["sh"],
-};
-
-const RUST: Language = Language {
-    name: "Rust",
-    exts: &["rs"],
-};
-
-const JAVASCRIPT: Language = Language {
-    name: "JavaScript",
-    exts: &["js", "mjs", "cjs", "jsx"],
-};
-
-const TYPESCRIPT: Language = Language {
-    name: "TypeScript",
-    exts: &["ts", "mts", "cts", "tsx"],
-};
-
-const PYTHON: Language = Language {
-    name: "Python",
-    exts: &["py"],
-};
-
-const JAVA: Language = Language {
-    name: "Java",
-    exts: &["java"],
+const ASTRO: Language = Language {
+    name: "Astro",
+    exts: &["astro"],
 };
 
 const C: Language = Language {
@@ -35,29 +10,19 @@ const C: Language = Language {
     exts: &["c"],
 };
 
+const COBOL: Language = Language {
+    name: "COBOL",
+    exts: &["cbl", "cob", "cobol"],
+};
+
 const CPP: Language = Language {
     name: "C++",
     exts: &["cpp", "cc", "cxx"],
 };
 
-const GO: Language = Language {
-    name: "Go",
-    exts: &["go"],
-};
-
-const RUBY: Language = Language {
-    name: "Ruby",
-    exts: &["rb"],
-};
-
-const PHP: Language = Language {
-    name: "PHP",
-    exts: &["php"],
-};
-
-const HTML: Language = Language {
-    name: "HTML",
-    exts: &["html", "htm"],
+const CSHARP: Language = Language {
+    name: "C#",
+    exts: &["cs"],
 };
 
 const CSS: Language = Language {
@@ -65,13 +30,151 @@ const CSS: Language = Language {
     exts: &["css"],
 };
 
+const DART: Language = Language {
+    name: "Dart",
+    exts: &["dart"],
+};
+
+const ELIXIR: Language = Language {
+    name: "Elixir",
+    exts: &["ex", "exs"],
+};
+
+const GO: Language = Language {
+    name: "Go",
+    exts: &["go"],
+};
+
+const HASKELL: Language = Language {
+    name: "Haskell",
+    exts: &["hs"],
+};
+
+const HTML: Language = Language {
+    name: "HTML",
+    exts: &["html", "htm"],
+};
+
+const JAVA: Language = Language {
+    name: "Java",
+    exts: &["java"],
+};
+
+const JAVASCRIPT: Language = Language {
+    name: "JavaScript",
+    exts: &["js", "mjs", "cjs", "jsx"],
+};
+
+const KOTLIN: Language = Language {
+    name: "Kotlin",
+    exts: &["kt", "kts"],
+};
+
+const LUA: Language = Language {
+    name: "Lua",
+    exts: &["lua"],
+};
+
+const OBJECTIVE_C: Language = Language {
+    name: "Objective-C",
+    exts: &["m", "mm"],
+};
+
+const PERL: Language = Language {
+    name: "Perl",
+    exts: &["pl", "pm"],
+};
+
+const PHP: Language = Language {
+    name: "PHP",
+    exts: &["php"],
+};
+
+const PYTHON: Language = Language {
+    name: "Python",
+    exts: &["py"],
+};
+
+const R: Language = Language {
+    name: "R",
+    exts: &["r", "R"],
+};
+
+const RUBY: Language = Language {
+    name: "Ruby",
+    exts: &["rb"],
+};
+
+const SCALA: Language = Language {
+    name: "Scala",
+    exts: &["scala", "sc"],
+};
+
+const RUST: Language = Language {
+    name: "Rust",
+    exts: &["rs"],
+};
+
 const SCSS: Language = Language {
     name: "SCSS",
     exts: &["scss", "sass"],
 };
 
+const SHELL: Language = Language {
+    name: "Shell",
+    exts: &["sh"],
+};
+
+const SVELTE: Language = Language {
+    name: "Svelte",
+    exts: &["svelte"],
+};
+
+const SWIFT: Language = Language {
+    name: "Swift",
+    exts: &["swift"],
+};
+
+const TYPESCRIPT: Language = Language {
+    name: "TypeScript",
+    exts: &["ts", "mts", "cts", "tsx"],
+};
+
+const VUE: Language = Language {
+    name: "Vue",
+    exts: &["vue"],
+};
+
 const SUPPORTER_LANGUAGES: &[Language] = &[
-    SHELL, RUST, JAVASCRIPT, TYPESCRIPT, PYTHON, JAVA, C, CPP, GO, RUBY, PHP, HTML, CSS, SCSS,
+    ASTRO,
+    C,
+    CPP,
+    CSHARP,
+    COBOL,
+    CSS,
+    DART,
+    ELIXIR,
+    GO,
+    HASKELL,
+    HTML,
+    JAVA,
+    JAVASCRIPT,
+    KOTLIN,
+    LUA,
+    OBJECTIVE_C,
+    PERL,
+    PHP,
+    PYTHON,
+    R,
+    RUBY,
+    RUST,
+    SCALA,
+    SCSS,
+    SHELL,
+    SVELTE,
+    SWIFT,
+    TYPESCRIPT,
+    VUE,
 ];
 
 pub struct LanguageConfig;

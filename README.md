@@ -42,6 +42,14 @@ techscan ./project
 └────────────┴───────┴────────────┘
 ```
 
+## Supported Languages
+
+Astro, C, C++, C#, COBOL, CSS, Dart, Elixir, Go, Haskell, HTML, Java, JavaScript, Kotlin, Lua, Objective-C, Perl, PHP, Python, R, Ruby, Rust, Scala, SCSS, Shell, Svelte, Swift, TypeScript, Vue
+
+**Note**: Frameworks and libraries with unique file extensions (e.g., `.vue`, `.svelte`, `.astro`) are analyzed as independent languages for technology stack analysis purposes.
+
+Language addition requests are welcome through Issues or Pull Requests.
+
 ## CLI Options
 
 ### Options
