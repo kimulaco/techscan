@@ -65,20 +65,17 @@ Language addition requests are welcome through Issues or Pull Requests.
 #### Examples
 
 ```bash
-# Basic scan with table output (default)
-techscan ./project
+# Scan languages with table output (default)
+techscan lang ./project
 
-# JSON format output
-techscan ./project --reporter json
+# Scan languages with JSON output
+techscan lang ./project --reporter json
 
-# Exclude specific file patterns
-techscan ./project --exclude "*.test.ts" --exclude "node_modules"
+# Scan languages with exclude specific file patterns
+techscan lang ./project --exclude "*.test.ts" --exclude "node_modules"
 
 # Multiple excludes with short option
-techscan ./project -e "*.test.ts" -e "*.spec.ts" -e "dist"
-
-# Combined options
-techscan ./project --reporter json --exclude "*.test.*"
+techscan lang ./project -e "*.test.ts" -e "*.spec.ts" -e "dist"
 ```
 
 ## Development
