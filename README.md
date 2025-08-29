@@ -12,7 +12,7 @@ cargo install techscan
 
 ## CLI
 
-### Scan programin languages
+### Scan programming languages
 
 ```bash
 techscan lang ./project
