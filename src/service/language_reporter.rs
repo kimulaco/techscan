@@ -1,18 +1,18 @@
 use crate::config::{REPORTER_FORMAT_JSON, REPORTER_FORMAT_TABLE};
-use crate::entity::ScannerReport;
+use crate::entity::LanguageReport;
 use std::io;
 use tabled::builder::Builder;
 use tabled::settings::{object::Rows, Alignment, Modify, Style};
 
-pub struct Reporter;
+pub struct LanguageReporter;
 
-impl Default for Reporter {
+impl Default for LanguageReporter {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl Reporter {
+impl LanguageReporter {
     pub fn new() -> Self {
         Self
     }
@@ -27,7 +27,7 @@ impl Reporter {
         }
     }
 
-    pub fn output(&self, report: &ScannerReport, format: &str) -> io::Result<()> {
+    pub fn output(&self, report: &LanguageReport, format: &str) -> io::Result<()> {
         Self::validate_format(format)?;
 
         let output_string = match format {
@@ -40,12 +40,12 @@ impl Reporter {
         Ok(())
     }
 
-    fn to_json(&self, report: &ScannerReport) -> io::Result<String> {
+    fn to_json(&self, report: &LanguageReport) -> io::Result<String> {
         serde_json::to_string_pretty(report)
             .map_err(|e| io::Error::other(format!("JSON serialization error: {}", e)))
     }
 
-    fn to_table(&self, report: &ScannerReport) -> io::Result<String> {
+    fn to_table(&self, report: &LanguageReport) -> io::Result<String> {
         let mut output = Vec::new();
 
         let mut summary_builder = Builder::default();
@@ -92,21 +92,21 @@ impl Reporter {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::entity::{Language, ScannerLanguage};
+    use crate::entity::{Language, LanguageReportItem};
 
-    fn create_test_report() -> ScannerReport {
+    fn create_test_report() -> LanguageReport {
         let language = Language {
             name: "Rust",
             exts: &["rs"],
         };
 
-        let language_report = ScannerLanguage {
+        let language_report = LanguageReportItem {
             language,
             file_count: 5,
             file_paths: vec!["src/main.rs".to_string(), "src/lib.rs".to_string()],
         };
 
-        ScannerReport {
+        LanguageReport {
             dir: "/test/path".to_string(),
             total_file_count: 5,
             languages: vec![language_report],
@@ -115,12 +115,12 @@ mod tests {
 
     #[test]
     fn test_validate_format_valid() {
-        assert!(Reporter::validate_format("table").is_ok());
+        assert!(LanguageReporter::validate_format("table").is_ok());
     }
 
     #[test]
     fn test_validate_format_invalid() {
-        let result = Reporter::validate_format("xml");
+        let result = LanguageReporter::validate_format("xml");
         assert!(result.is_err());
 
         let error_msg = result.unwrap_err().to_string();
@@ -132,7 +132,7 @@ mod tests {
 
     #[test]
     fn test_to_json_success() {
-        let reporter = Reporter::new();
+        let reporter = LanguageReporter::new();
         let report = create_test_report();
 
         let result = reporter.to_json(&report);

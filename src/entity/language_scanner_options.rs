@@ -1,4 +1,4 @@
 #[derive(Default)]
-pub struct ScannerOptions {
+pub struct LanguageScannerOptions {
     pub exclude: Vec<String>,
 }

@@ -1,6 +1,6 @@
 use crate::config::LanguageConfig;
-use crate::entity::ScannerOptions;
-use crate::entity::{File, ScannerLanguage, ScannerReport};
+use crate::entity::LanguageScannerOptions;
+use crate::entity::{File, LanguageReport, LanguageReportItem};
 use ignore::{overrides::OverrideBuilder, Walk, WalkBuilder};
 use std::collections::HashMap;
 use std::io;
@@ -8,13 +8,13 @@ use std::path::Path;
 
 const GLOBAL_EXCLUDE_PATH: [&str; 2] = [".git", ".DS_Store"];
 
-pub struct Scanner {
+pub struct LanguageScanner {
     dir: String,
-    opts: ScannerOptions,
+    opts: LanguageScannerOptions,
 }
 
-impl Scanner {
-    pub fn new(dir: String, opts: Option<ScannerOptions>) -> io::Result<Self> {
+impl LanguageScanner {
+    pub fn new(dir: String, opts: Option<LanguageScannerOptions>) -> io::Result<Self> {
         if !Path::new(&dir).exists() {
             return Err(io::Error::new(
                 io::ErrorKind::NotFound,
@@ -22,7 +22,7 @@ impl Scanner {
             ));
         }
 
-        let opts = opts.map_or_else(ScannerOptions::default, |o| o);
+        let opts = opts.map_or_else(LanguageScannerOptions::default, |o| o);
 
         Ok(Self { dir, opts })
     }
@@ -53,7 +53,7 @@ impl Scanner {
         Ok(files)
     }
 
-    pub fn analyze(&self, files: Vec<File>) -> ScannerReport {
+    pub fn analyze(&self, files: Vec<File>) -> LanguageReport {
         let mut language_data: HashMap<String, Vec<String>> = HashMap::new();
 
         for file in &files {
@@ -71,7 +71,7 @@ impl Scanner {
         let mut languages = Vec::new();
         for (lang_name, file_paths) in language_data {
             if let Some(language) = LanguageConfig::get_language_by_name(&lang_name) {
-                languages.push(ScannerLanguage {
+                languages.push(LanguageReportItem {
                     language,
                     file_count: file_paths.len() as u64,
                     file_paths,
@@ -81,7 +81,7 @@ impl Scanner {
 
         languages.sort_by(|a, b| b.file_count.cmp(&a.file_count));
 
-        ScannerReport {
+        LanguageReport {
             dir: self.dir.clone(),
             total_file_count: files.len() as u64,
             languages,
@@ -134,8 +134,8 @@ mod tests {
 
     #[test]
     fn test_scan_cli_fixture() {
-        let scanner = Scanner::new("tests/fixtures/cli".to_string(), None)
-            .expect("Scanner creation should succeed for existing directory");
+        let scanner = LanguageScanner::new("tests/fixtures/cli".to_string(), None)
+            .expect("LanguageScanner creation should succeed for existing directory");
 
         let files = scanner.scan().expect("Scanning should succeed");
 
@@ -162,17 +162,17 @@ mod tests {
     #[test]
     #[should_panic(expected = "Directory does not exist")]
     fn test_scanner_nonexistent_directory() {
-        Scanner::new("nonexistent/directory".to_string(), None).expect("This should panic");
+        LanguageScanner::new("nonexistent/directory".to_string(), None).expect("This should panic");
     }
 
     #[test]
     fn test_scan_with_exclude_pattern() {
-        let opts = ScannerOptions {
+        let opts = LanguageScannerOptions {
             exclude: vec!["*.rs".to_string()],
         };
 
-        let scanner = Scanner::new("tests/fixtures/cli".to_string(), Some(opts))
-            .expect("Scanner creation should succeed");
+        let scanner = LanguageScanner::new("tests/fixtures/cli".to_string(), Some(opts))
+            .expect("LanguageScanner creation should succeed");
 
         let files = scanner.scan().expect("Scanning should succeed");
 
@@ -189,12 +189,12 @@ mod tests {
 
     #[test]
     fn test_scan_with_multiple_exclude_patterns() {
-        let opts = ScannerOptions {
+        let opts = LanguageScannerOptions {
             exclude: vec!["*.rs".to_string(), "*.js".to_string(), "*.rb".to_string()],
         };
 
-        let scanner = Scanner::new("tests/fixtures/cli".to_string(), Some(opts))
-            .expect("Scanner creation should succeed");
+        let scanner = LanguageScanner::new("tests/fixtures/cli".to_string(), Some(opts))
+            .expect("LanguageScanner creation should succeed");
 
         let files = scanner.scan().expect("Scanning should succeed");
 

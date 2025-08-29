@@ -5,8 +5,8 @@ mod service;
 
 use crate::cli::{Cli, Commands};
 use crate::config::REPORTER_FORMAT_TABLE;
-use crate::entity::ScannerOptions;
-use crate::service::{Reporter, Scanner};
+use crate::entity::LanguageScannerOptions;
+use crate::service::{LanguageReporter, LanguageScanner};
 
 fn main() {
     let cli = Cli::new().unwrap_or_else(|e| {
@@ -47,16 +47,16 @@ fn handle_language_command(
         .as_deref()
         .unwrap_or(REPORTER_FORMAT_TABLE);
 
-    Reporter::validate_format(reporter_format).unwrap_or_else(|e| {
+    LanguageReporter::validate_format(reporter_format).unwrap_or_else(|e| {
         eprintln!("Error: {}", e);
         std::process::exit(1);
     });
 
-    let opts = ScannerOptions {
+    let opts = LanguageScannerOptions {
         exclude: exclude_patterns.unwrap_or_default(),
     };
 
-    let scanner = Scanner::new(dir.clone(), Some(opts)).unwrap_or_else(|e| {
+    let scanner = LanguageScanner::new(dir.clone(), Some(opts)).unwrap_or_else(|e| {
         eprintln!("Error initializing scanner: {}", e);
         std::process::exit(1);
     });
@@ -70,7 +70,7 @@ fn handle_language_command(
 
     let report = scanner.analyze(files);
 
-    let reporter = Reporter::new();
+    let reporter = LanguageReporter::new();
 
     reporter
         .output(&report, reporter_format)

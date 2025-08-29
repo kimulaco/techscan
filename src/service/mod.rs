@@ -1,5 +1,5 @@
-pub mod reporter;
-pub mod scanner;
+pub mod language_reporter;
+pub mod language_scanner;
 
-pub use reporter::Reporter;
-pub use scanner::Scanner;
+pub use language_reporter::LanguageReporter;
+pub use language_scanner::LanguageScanner;
