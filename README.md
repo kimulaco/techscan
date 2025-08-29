@@ -2,16 +2,20 @@
 
 `techscan` is a Rust CLI tool for analyzing and visualizing technology stacks in a directory.
 
-## Usage
+## Install
 
 ### Cargo
 
 ```bash
-# Install techscan
 cargo install techscan
+```
 
-# Run techscan
-techscan ./project
+## CLI
+
+### Scan programin languages
+
+```bash
+techscan lang ./project
 
 === Scan Summary ===
 ┌─────────────┬────────────────────┐
@@ -38,11 +42,10 @@ techscan ./project
 │ Python     │ 1     │ 3.6%       │
 │ CSS        │ 1     │ 3.6%       │
 │ C          │ 1     │ 3.6%       │
-│ Total      │ 28    │ 100.0%     │
 └────────────┴───────┴────────────┘
 ```
 
-## Supported Languages
+#### Supported Languages
 
 Astro, C, C++, C#, COBOL, CSS, Dart, Elixir, Go, Haskell, HTML, Java, JavaScript, Kotlin, Lua, Objective-C, Perl, PHP, Python, R, Ruby, Rust, Scala, SCSS, Shell, Svelte, Swift, TypeScript, Vue
 
@@ -50,16 +53,16 @@ Astro, C, C++, C#, COBOL, CSS, Dart, Elixir, Go, Haskell, HTML, Java, JavaScript
 
 Language addition requests are welcome through Issues or Pull Requests.
 
-## CLI Options
+### CLI Options
 
-### Options
+#### Options
 
 | Option | Short | Description | Default | Example |
 |--------|-------|-------------|---------|---------|
 | `--reporter` | `-r` | Output format: `table`, `json` | `table` | `--reporter json` |
 | `--exclude` | `-e` | Exclude path patterns (can be used multiple times) | - | `--exclude "*.test.ts"` |
 
-### Examples
+#### Examples
 
 ```bash
 # Basic scan with table output (default)
