@@ -27,7 +27,7 @@ fn main() {
 }
 
 fn handle_language_command(
-    dir: &String,
+    dir: &str,
     exclude: &Option<Vec<String>>,
     reporter: &Option<String>,
     config: &Option<String>,
@@ -56,7 +56,7 @@ fn handle_language_command(
         exclude: exclude_patterns.unwrap_or_default(),
     };
 
-    let scanner = LanguageScanner::new(dir.clone(), Some(opts)).unwrap_or_else(|e| {
+    let scanner = LanguageScanner::new(dir, Some(opts)).unwrap_or_else(|e| {
         eprintln!("Error initializing scanner: {}", e);
         std::process::exit(1);
     });

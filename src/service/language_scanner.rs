@@ -14,8 +14,8 @@ pub struct LanguageScanner {
 }
 
 impl LanguageScanner {
-    pub fn new(dir: String, opts: Option<LanguageScannerOptions>) -> io::Result<Self> {
-        if !Path::new(&dir).exists() {
+    pub fn new(dir: &str, opts: Option<LanguageScannerOptions>) -> io::Result<Self> {
+        if !Path::new(dir).exists() {
             return Err(io::Error::new(
                 io::ErrorKind::NotFound,
                 format!("Directory does not exist: {}", dir),
@@ -24,7 +24,10 @@ impl LanguageScanner {
 
         let opts = opts.map_or_else(LanguageScannerOptions::default, |o| o);
 
-        Ok(Self { dir, opts })
+        Ok(Self {
+            dir: dir.to_string(),
+            opts,
+        })
     }
 
     pub fn scan(&self) -> io::Result<Vec<File>> {
@@ -134,7 +137,7 @@ mod tests {
 
     #[test]
     fn test_scan_cli_fixture() {
-        let scanner = LanguageScanner::new("tests/fixtures/cli".to_string(), None)
+        let scanner = LanguageScanner::new("tests/fixtures/cli", None)
             .expect("LanguageScanner creation should succeed for existing directory");
 
         let files = scanner.scan().expect("Scanning should succeed");
@@ -162,7 +165,7 @@ mod tests {
     #[test]
     #[should_panic(expected = "Directory does not exist")]
     fn test_scanner_nonexistent_directory() {
-        LanguageScanner::new("nonexistent/directory".to_string(), None).expect("This should panic");
+        LanguageScanner::new("nonexistent/directory", None).expect("This should panic");
     }
 
     #[test]
@@ -171,7 +174,7 @@ mod tests {
             exclude: vec!["*.rs".to_string()],
         };
 
-        let scanner = LanguageScanner::new("tests/fixtures/cli".to_string(), Some(opts))
+        let scanner = LanguageScanner::new("tests/fixtures/cli", Some(opts))
             .expect("LanguageScanner creation should succeed");
 
         let files = scanner.scan().expect("Scanning should succeed");
@@ -193,7 +196,7 @@ mod tests {
             exclude: vec!["*.rs".to_string(), "*.js".to_string(), "*.rb".to_string()],
         };
 
-        let scanner = LanguageScanner::new("tests/fixtures/cli".to_string(), Some(opts))
+        let scanner = LanguageScanner::new("tests/fixtures/cli", Some(opts))
             .expect("LanguageScanner creation should succeed");
 
         let files = scanner.scan().expect("Scanning should succeed");
