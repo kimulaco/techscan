@@ -3,7 +3,7 @@ mod config;
 mod entity;
 mod service;
 
-use crate::cli::Cli;
+use crate::cli::{Cli, Commands};
 use crate::config::REPORTER_FORMAT_TABLE;
 use crate::entity::ScannerOptions;
 use crate::service::{Reporter, Scanner};
@@ -14,7 +14,38 @@ fn main() {
         std::process::exit(1);
     });
 
-    let reporter_format = cli.reporter.as_deref().unwrap_or(REPORTER_FORMAT_TABLE);
+    match &cli.command {
+        Commands::Language {
+            dir,
+            exclude,
+            reporter,
+            config,
+        } => {
+            handle_language_command(dir, exclude, reporter, config, &cli);
+        }
+    }
+}
+
+fn handle_language_command(
+    dir: &String,
+    exclude: &Option<Vec<String>>,
+    reporter: &Option<String>,
+    config: &Option<String>,
+    cli: &Cli,
+) {
+    let mut exclude_patterns = exclude.clone();
+    let mut reporter_format_option = reporter.clone();
+
+    if let Err(error_msg) =
+        cli.apply_config(config, &mut exclude_patterns, &mut reporter_format_option)
+    {
+        eprintln!("Error: {}", error_msg);
+        std::process::exit(1);
+    }
+
+    let reporter_format = reporter_format_option
+        .as_deref()
+        .unwrap_or(REPORTER_FORMAT_TABLE);
 
     Reporter::validate_format(reporter_format).unwrap_or_else(|e| {
         eprintln!("Error: {}", e);
@@ -22,15 +53,15 @@ fn main() {
     });
 
     let opts = ScannerOptions {
-        exclude: cli.exclude.unwrap_or_default(),
+        exclude: exclude_patterns.unwrap_or_default(),
     };
 
-    let scanner = Scanner::new(cli.dir.clone(), Some(opts)).unwrap_or_else(|e| {
+    let scanner = Scanner::new(dir.clone(), Some(opts)).unwrap_or_else(|e| {
         eprintln!("Error initializing scanner: {}", e);
         std::process::exit(1);
     });
 
-    println!("Processing directory: {}", &cli.dir);
+    println!("Processing directory: {}", dir);
 
     let files = scanner.scan().unwrap_or_else(|e| {
         eprintln!("Error scanning directory: {}", e);
