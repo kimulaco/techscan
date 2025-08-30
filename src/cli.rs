@@ -50,28 +50,103 @@ impl Cli {
 
         config.try_deserialize()
     }
+}
 
-    pub fn apply_config(
-        &self,
-        config_path: &Option<String>,
-        exclude: &mut Option<Vec<String>>,
-        reporter: &mut Option<String>,
-    ) -> Result<(), String> {
-        if let Some(path) = config_path {
-            match self.load_config_file(path) {
-                Ok(config_data) => {
-                    if exclude.is_none() && config_data.exclude.is_some() {
-                        *exclude = config_data.exclude;
-                    }
-                    if reporter.is_none() && config_data.reporter.is_some() {
-                        *reporter = config_data.reporter;
-                    }
-                    Ok(())
-                }
-                Err(_) => Err(format!("Failed to load config file: {}", path)),
-            }
-        } else {
-            Ok(())
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use clap::Parser;
+
+    fn create_test_cli() -> Cli {
+        Cli::parse_from(["techscan", "lang", "."])
+    }
+
+    mod load_config_file {
+        use super::*;
+
+        #[test]
+        fn test_load_json_file() {
+            let cli = create_test_cli();
+            let config_path = "tests/fixtures/cli/config/complete.json";
+            let config = cli.load_config_file(config_path).unwrap();
+
+            assert_eq!(
+                config.exclude,
+                Some(vec!["*.test.*".into(), "exclude_dir".into()])
+            );
+            assert_eq!(config.reporter, Some("json".into()));
+        }
+
+        #[test]
+        fn test_load_json5_file() {
+            let cli = create_test_cli();
+            let config_path = "tests/fixtures/cli/config/complete.json5";
+            let config = cli.load_config_file(config_path).unwrap();
+
+            assert_eq!(
+                config.exclude,
+                Some(vec!["*.test.*".into(), "exclude_dir".into()])
+            );
+            assert_eq!(config.reporter, Some("json".into()));
+        }
+
+        #[test]
+        fn test_load_toml_file() {
+            let cli = create_test_cli();
+            let config_path = "tests/fixtures/cli/config/complete.toml";
+            let config = cli.load_config_file(config_path).unwrap();
+
+            assert_eq!(
+                config.exclude,
+                Some(vec!["*.test.*".into(), "exclude_dir".into()])
+            );
+            assert_eq!(config.reporter, Some("json".into()));
+        }
+
+        #[test]
+        fn test_load_yaml_file() {
+            let cli = create_test_cli();
+            let config_path = "tests/fixtures/cli/config/complete.yaml";
+            let config = cli.load_config_file(config_path).unwrap();
+
+            assert_eq!(
+                config.exclude,
+                Some(vec!["*.test.*".into(), "exclude_dir".into()])
+            );
+            assert_eq!(config.reporter, Some("json".into()));
+        }
+
+        #[test]
+        fn test_load_yml_file() {
+            let cli = create_test_cli();
+            let config_path = "tests/fixtures/cli/config/complete.yml";
+            let config = cli.load_config_file(config_path).unwrap();
+
+            assert_eq!(
+                config.exclude,
+                Some(vec!["*.test.*".into(), "exclude_dir".into()])
+            );
+            assert_eq!(config.reporter, Some("json".into()));
+        }
+
+        #[test]
+        fn test_load_reporter_only() {
+            let cli = create_test_cli();
+            let config_path = "tests/fixtures/cli/config/reporter_only.yaml";
+            let config = cli.load_config_file(config_path).unwrap();
+
+            assert_eq!(
+                config.exclude,
+                Some(vec!["*.test.*".into(), "exclude_dir".into()])
+            );
+            assert_eq!(config.reporter, None);
+        }
+
+        #[test]
+        fn test_nonexistent_config_file() {
+            let cli = create_test_cli();
+            let result = cli.load_config_file("non_existent.json");
+            assert!(result.is_err());
         }
     }
 }

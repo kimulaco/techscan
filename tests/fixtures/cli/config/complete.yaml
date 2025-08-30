@@ -1,0 +1,4 @@
+exclude:
+  - "*.test.*"
+  - "exclude_dir"
+reporter: "json"

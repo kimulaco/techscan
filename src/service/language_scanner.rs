@@ -159,7 +159,7 @@ mod tests {
         }
 
         // ファイル数の確認（適切な数のファイルがスキャンされていること）
-        assert!(files.len() == 28, "Expected 28 files, got {}", files.len());
+        assert!(files.len() == 29, "Expected 29 files, got {}", files.len());
     }
 
     #[test]

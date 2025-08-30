@@ -6,7 +6,7 @@ mod service;
 use crate::cli::{Cli, Commands};
 use crate::config::REPORTER_FORMAT_TABLE;
 use crate::entity::LanguageScannerOptions;
-use crate::service::{LanguageReporter, LanguageScanner};
+use crate::service::{ConfigBuilder, LanguageReporter, LanguageScanner};
 
 fn main() {
     let cli = Cli::new().unwrap_or_else(|e| {
@@ -33,17 +33,17 @@ fn handle_language_command(
     config: &Option<String>,
     cli: &Cli,
 ) {
-    let mut exclude_patterns = exclude.clone();
-    let mut reporter_format_option = reporter.clone();
+    let config_builder = ConfigBuilder::from_cli_args(exclude, reporter)
+        .merge_file_config(cli, config)
+        .unwrap_or_else(|error_msg| {
+            eprintln!("Error: {}", error_msg);
+            std::process::exit(1);
+        });
 
-    if let Err(error_msg) =
-        cli.apply_config(config, &mut exclude_patterns, &mut reporter_format_option)
-    {
-        eprintln!("Error: {}", error_msg);
-        std::process::exit(1);
-    }
+    let final_config = config_builder.build();
 
-    let reporter_format = reporter_format_option
+    let reporter_format = final_config
+        .reporter
         .as_deref()
         .unwrap_or(REPORTER_FORMAT_TABLE);
 
@@ -53,7 +53,7 @@ fn handle_language_command(
     });
 
     let opts = LanguageScannerOptions {
-        exclude: exclude_patterns.unwrap_or_default(),
+        exclude: final_config.exclude.unwrap_or_default(),
     };
 
     let scanner = LanguageScanner::new(dir, Some(opts)).unwrap_or_else(|e| {
