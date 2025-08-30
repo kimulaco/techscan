@@ -21,7 +21,7 @@ impl ConfigBuilder {
         if let Some(path) = config_path {
             let file_config = cli
                 .load_config_file(path)
-                .map_err(|_| format!("Failed to load config file: {}", path))?;
+                .map_err(|err| format!("Failed to load config file: {}: {}", path, err))?;
 
             if self.exclude.is_none() {
                 self.exclude = file_config.exclude;
