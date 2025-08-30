@@ -143,7 +143,7 @@ mod tests {
         }
 
         #[test]
-        fn test_no_nexistent_config_file() {
+        fn test_nonexistent_config_file() {
             let cli = create_test_cli();
             let result = cli.load_config_file("non_existent.json");
             assert!(result.is_err());
