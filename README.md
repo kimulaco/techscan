@@ -53,7 +53,9 @@ Astro, C, C++, C#, COBOL, CSS, Dart, Elixir, Go, Haskell, HTML, Java, JavaScript
 
 Language addition requests are welcome through Issues or Pull Requests.
 
-### CLI Options
+### CLI Arguments
+
+CLI arguments take precedence over configuration file options.
 
 #### Options
 
@@ -61,6 +63,7 @@ Language addition requests are welcome through Issues or Pull Requests.
 |--------|-------|-------------|---------|---------|
 | `--reporter` | `-r` | Output format: `table`, `json` | `table` | `--reporter json` |
 | `--exclude` | `-e` | Exclude path patterns (can be used multiple times) | - | `--exclude "*.test.ts"` |
+| `--config` | `-c` | Configuration file path | - | `--config techscan.json` |
 
 #### Examples
 
@@ -76,6 +79,50 @@ techscan lang ./project --exclude "*.test.ts" --exclude "node_modules"
 
 # Multiple excludes with short option
 techscan lang ./project -e "*.test.ts" -e "*.spec.ts" -e "dist"
+
+# Using configuration file
+techscan lang ./project --config techscan.json
+
+# Configuration file with CLI option override
+techscan lang ./project --config techscan.json --exclude "node_modules"
+```
+
+### CLI Configuration File
+
+`techscan` supports configuration files in JSON (`.json`, `.json5`), YAML (`.yaml`, `.yml`), and TOML (`.toml`) formats to set default options.
+
+#### Options
+
+| Setting | Type | Description | Default | Example |
+|---------|------|-------------|---------|---------|
+| `exclude` | Array of strings | File patterns to exclude from analysis | `[]` (none) | `["*.test.*", "dist"]` |
+| `reporter` | String | Output format (`"table"` or `"json"`) | `"table"` | `"json"` |
+
+#### Examples
+
+##### JSON Format
+
+```json
+{
+  "exclude": ["*.test.*", "dist"],
+  "reporter": "json"
+}
+```
+
+##### YAML Format
+
+```yaml
+exclude:
+  - "*.test.*"
+  - "dist"
+reporter: "json"
+```
+
+##### TOML Format
+
+```toml
+exclude = ["*.test.*", "dist"]
+reporter = "json"
 ```
 
 ## Development
