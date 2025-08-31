@@ -139,7 +139,10 @@ mod tests {
         }
 
         #[test]
-                .merge_file_config(&Some("tests/fixtures/cli/config/complete.json5".to_string()));
+        fn test_merge_file_config_with_valid_json5() {
+            let builder = ConfigBuilder::from_cli_args(&None, &None);
+            let result = builder
+                .merge_file_config(&Some("tests/fixtures/cli/config/complete.json".to_string()));
 
             assert!(result.is_ok());
             let builder = result.unwrap();
