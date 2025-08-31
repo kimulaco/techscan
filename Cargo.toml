@@ -12,6 +12,10 @@ readme = "README.md"
 name = "techscan"
 path = "src/main.rs"
 
+[lib]
+name = "techscan"
+path = "src/lib.rs"
+
 [dependencies]
 clap = {version = "4.5.43", features = ["derive"]}
 config = "0.15.14"
