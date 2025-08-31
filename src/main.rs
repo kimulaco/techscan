@@ -21,7 +21,7 @@ fn main() {
             reporter,
             config,
         } => {
-            handle_language_command(dir, exclude, reporter, config, &cli);
+            handle_language_command(dir, exclude, reporter, config);
         }
     }
 }
@@ -31,10 +31,9 @@ fn handle_language_command(
     exclude: &Option<Vec<String>>,
     reporter: &Option<String>,
     config: &Option<String>,
-    cli: &Cli,
 ) {
     let config_builder = ConfigBuilder::from_cli_args(exclude, reporter)
-        .merge_file_config(cli, config)
+        .merge_file_config(config)
         .unwrap_or_else(|error_msg| {
             eprintln!("Error: {}", error_msg);
             std::process::exit(1);

@@ -1,4 +1,5 @@
-use crate::cli::{AppConfig, Cli};
+use crate::entity::AppConfig;
+use config::{Config, ConfigError, File};
 
 pub struct ConfigBuilder {
     pub exclude: Option<Vec<String>>,
@@ -13,13 +14,9 @@ impl ConfigBuilder {
         }
     }
 
-    pub fn merge_file_config(
-        mut self,
-        cli: &Cli,
-        config_path: &Option<String>,
-    ) -> Result<Self, String> {
+    pub fn merge_file_config(mut self, config_path: &Option<String>) -> Result<Self, String> {
         if let Some(path) = config_path {
-            let file_config = cli
+            let file_config = self
                 .load_config_file(path)
                 .map_err(|err| format!("Failed to load config file: {}: {}", path, err))?;
 
@@ -38,5 +35,13 @@ impl ConfigBuilder {
             exclude: self.exclude,
             reporter: self.reporter,
         }
+    }
+
+    fn load_config_file(&self, path: &str) -> Result<AppConfig, ConfigError> {
+        let config = Config::builder()
+            .add_source(File::with_name(path))
+            .build()?;
+
+        config.try_deserialize()
     }
 }
