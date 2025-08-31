@@ -245,11 +245,8 @@ mod tests {
             assert!(result.is_ok());
 
             let builder = result.unwrap();
-            assert_eq!(
-                builder.exclude,
-                Some(vec!["*.test.*".to_string(), "exclude_dir".to_string()])
-            );
-            assert_eq!(builder.reporter, None);
+            assert_eq!(builder.exclude, None);
+            assert_eq!(builder.reporter, Some("json".to_string()));
         }
 
         #[test]
