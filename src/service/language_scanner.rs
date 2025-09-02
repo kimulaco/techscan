@@ -1,25 +1,22 @@
 use crate::config::LanguageConfig;
 use crate::entity::LanguageScannerOptions;
-use crate::entity::{File, LanguageReport, LanguageReportItem};
+use crate::entity::{File, LanguageReport, LanguageReportItem, Result, TechScanError};
 use ignore::{overrides::OverrideBuilder, Walk, WalkBuilder};
 use std::collections::HashMap;
-use std::io;
 use std::path::Path;
 
 const GLOBAL_EXCLUDE_PATH: [&str; 2] = [".git", ".DS_Store"];
 
+#[derive(Debug)]
 pub struct LanguageScanner {
     dir: String,
     opts: LanguageScannerOptions,
 }
 
 impl LanguageScanner {
-    pub fn new(dir: &str, opts: Option<LanguageScannerOptions>) -> io::Result<Self> {
+    pub fn new(dir: &str, opts: Option<LanguageScannerOptions>) -> Result<Self> {
         if !Path::new(dir).exists() {
-            return Err(io::Error::new(
-                io::ErrorKind::NotFound,
-                format!("Directory does not exist: {}", dir),
-            ));
+            return Err(TechScanError::DirectoryNotFound(dir.to_string()));
         }
 
         let opts = opts.map_or_else(LanguageScannerOptions::default, |o| o);
@@ -30,7 +27,7 @@ impl LanguageScanner {
         })
     }
 
-    pub fn scan(&self) -> io::Result<Vec<File>> {
+    pub fn scan(&self) -> Result<Vec<File>> {
         let entries = self._walk_dir()?;
         let mut files = Vec::new();
 
@@ -91,14 +88,14 @@ impl LanguageScanner {
         }
     }
 
-    fn _walk_dir(&self) -> io::Result<Walk> {
+    fn _walk_dir(&self) -> Result<Walk> {
         let mut override_builder = OverrideBuilder::new(&self.dir);
 
         for pattern in GLOBAL_EXCLUDE_PATH.iter() {
             override_builder
                 .add(&format!("!{}", pattern))
                 .map_err(|e| {
-                    io::Error::other(format!(
+                    TechScanError::ValidationError(format!(
                         "Failed to add global exclude pattern '{}': {}",
                         pattern, e
                     ))
@@ -109,16 +106,16 @@ impl LanguageScanner {
             override_builder
                 .add(&format!("!{}", pattern))
                 .map_err(|e| {
-                    io::Error::other(format!(
+                    TechScanError::ValidationError(format!(
                         "Failed to add exclude pattern '{}': {}",
                         pattern, e
                     ))
                 })?;
         }
 
-        let overrides = override_builder
-            .build()
-            .map_err(|e| io::Error::other(format!("Failed to build overrides: {}", e)))?;
+        let overrides = override_builder.build().map_err(|e| {
+            TechScanError::ValidationError(format!("Failed to build overrides: {}", e))
+        })?;
 
         let entries = WalkBuilder::new(&self.dir)
             .git_ignore(true)
@@ -163,9 +160,17 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "Directory does not exist")]
     fn test_scanner_nonexistent_directory() {
-        LanguageScanner::new("nonexistent/directory", None).expect("This should panic");
+        let result = LanguageScanner::new("nonexistent/directory", None);
+
+        assert!(result.is_err());
+
+        match result.unwrap_err() {
+            TechScanError::DirectoryNotFound(path) => {
+                assert_eq!(path, "nonexistent/directory");
+            }
+            _ => panic!("Expected DirectoryNotFound error"),
+        }
     }
 
     #[test]

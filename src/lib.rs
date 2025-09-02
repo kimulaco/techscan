@@ -2,7 +2,10 @@ pub mod config;
 pub mod entity;
 pub mod service;
 
-pub use entity::{File, Language, LanguageReport, LanguageReportItem, LanguageScannerOptions};
+pub use entity::{
+    File, Language, LanguageReport, LanguageReportItem, LanguageScannerOptions, Result,
+    TechScanError,
+};
 
 pub use config::{LanguageConfig, REPORTER_FORMAT_JSON, REPORTER_FORMAT_TABLE};
 
