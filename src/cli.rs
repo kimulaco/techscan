@@ -4,6 +4,7 @@ use config::ConfigError;
 #[derive(Parser)]
 #[command(name = "techscan")]
 #[command(about = "A tool for analyzing and visualizing technology stacks in codes.")]
+#[command(version)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
