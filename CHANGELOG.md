@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.0.0] - 2025-09-05
+
+### Breaking changes
+
+- Migrate language scanning to the `language` (`lang`) subcommand. [#5](https://github.com/kimulaco/techscan/issues/5)
+  ```bash
+  # before
+  techscan scan_dir_path
+
+  # After
+  techscan lang scan_dir_path
+  ```
+
+### Feature
+
+- Provide libraries. [#4](https://github.com/kimulaco/techscan/issues/4)
+- Official support `--config` option. [#6](https://github.com/kimulaco/techscan/issues/6)
+- Changed to return `TechScanError` when an error occurs. [#12](https://github.com/kimulaco/techscan/issues/12)
+- Fixed add `--version` option. [#18](https://github.com/kimulaco/techscan/issues/18)
+
 ## [0.2.0] - 2025-08-23
 
 ### Feature
