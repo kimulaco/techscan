@@ -1,6 +1,11 @@
 # techscan
 
-`techscan` is a Rust CLI tool for analyzing and visualizing technology stacks in a directory.
+[![Latest Version](https://img.shields.io/github/v/release/kimulaco/techscan)](https://crates.io/crates/techscan)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE-MIT)
+
+`techscan` is a CLI tool for analyzing and visualizing technology stacks in a directory.
+
+`techscan` is build with Rust, providing high performance for analyzing large-scale projects such as monorepos and tracking technology stack migrations.
 
 ## Install
 
@@ -17,31 +22,28 @@ cargo install techscan
 ```bash
 techscan lang ./project
 
+Processing directory: /Users/kimulaco/project
+
 === Scan Summary ===
-┌─────────────┬────────────────────┐
-│    Item     │       Value        │
-├─────────────┼────────────────────┤
-│ Directory   │ ./project.         │
-│ Total Files │ 28                 │
-└─────────────┴────────────────────┘
+┌─────────────┬─────────────────────────────────────────┐
+│    Item     │                  Value                  │
+├─────────────┼─────────────────────────────────────────┤
+│ Directory   │ /Users/kimulaco/project │
+│ Total Files │ 5160                                    │
+└─────────────┴─────────────────────────────────────────┘
 
 === Language Statistics ===
 ┌────────────┬───────┬────────────┐
-│  Language  │ Files │ Percentage │
+│ Language   │ Files │ Percentage │
 ├────────────┼───────┼────────────┤
-│ TypeScript │ 4     │ 14.3%      │
-│ JavaScript │ 4     │ 14.3%      │
-│ C++        │ 3     │ 10.7%      │
-│ HTML       │ 2     │ 7.1%       │
-│ SCSS       │ 2     │ 7.1%       │
-│ Shell      │ 1     │ 3.6%       │
-│ PHP        │ 1     │ 3.6%       │
-│ Go         │ 1     │ 3.6%       │
-│ Rust       │ 1     │ 3.6%       │
-│ Ruby       │ 1     │ 3.6%       │
-│ Python     │ 1     │ 3.6%       │
-│ CSS        │ 1     │ 3.6%       │
-│ C          │ 1     │ 3.6%       │
+│ TypeScript │ 2978  │ 57.7%      │
+│ JavaScript │ 926   │ 17.9%      │
+│ HTML       │ 146   │ 2.8%       │
+│ Svelte     │ 43    │ 0.8%       │
+│ Vue        │ 41    │ 0.8%       │
+│ Astro      │ 20    │ 0.4%       │
+│ CSS        │ 16    │ 0.3%       │
+│ Shell      │ 9     │ 0.2%       │
 └────────────┴───────┴────────────┘
 ```
 
@@ -64,6 +66,7 @@ CLI arguments take precedence over configuration file options.
 | `--reporter` | `-r` | Output format: `table`, `json` | `table` | `--reporter json` |
 | `--exclude` | `-e` | Exclude path patterns (can be used multiple times) | - | `--exclude "*.test.ts"` |
 | `--config` | `-c` | Configuration file path | - | `--config techscan.json` |
+| `--version` |  | Display techscan version | - | `--version` |
 
 #### Examples
 
