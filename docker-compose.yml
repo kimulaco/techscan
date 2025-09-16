@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  techscan-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/workspace
+      - cargo-cache:/usr/local/cargo/registry
+      - target-cache:/workspace/target
+    working_dir: /workspace
+
+volumes:
+  cargo-cache:
+  target-cache:

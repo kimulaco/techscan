@@ -1,6 +1,9 @@
+# Build artifacts
 /target
 
-docs
-CLAUDE.md
-
+# OS-specific files
 .DS_Store
+
+# Claude
+CLAUDE.md
+.claude/settings.local.json
