@@ -1,0 +1,14 @@
+{
+  "name": "TechScan Development",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "techscan-dev",
+  "workspaceFolder": "/workspace",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["rust-lang.rust-analyzer"]
+    }
+  }
+}
