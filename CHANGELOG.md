@@ -1,6 +1,12 @@
 # Changelog
 
-## [1.0.1] - 2025-09-20
+## 1.0.2 - 2025-09-21
+
+### Fixes
+
+- fix: percentage calculation for `lang` command [#30](https://github.com/kimulaco/techscan/issues/30)
+
+## 1.0.1 - 2025-09-20
 
 **No changes to the core library or CLI functionality.**
 
@@ -8,7 +14,7 @@
 
 - Added Homebrew installation support: `brew tap kimulaco/techscan && brew install techscan`
 
-## [1.0.0] - 2025-09-05
+## 1.0.0 - 2025-09-05
 
 ### Breaking changes
 
@@ -50,7 +56,7 @@
   - Swift (`.swift`)
   - Vue (`.vue`)
 
-## [0.1.0] - 2025-08-22
+## 0.1.0 - 2025-08-22
 
 ### Feature
 

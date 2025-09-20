@@ -27,30 +27,36 @@ brew install techscan
 ### Scan programming languages
 
 ```bash
-techscan lang ./project
+techscan lang .
 
-Processing directory: /Users/kimulaco/project
-
+Processing directory: .
 === Scan Summary ===
-┌─────────────┬─────────────────────────────────────────┐
-│    Item     │                  Value                  │
-├─────────────┼─────────────────────────────────────────┤
-│ Directory   │ /Users/kimulaco/project │
-│ Total Files │ 5160                                    │
-└─────────────┴─────────────────────────────────────────┘
+┌────────────────┬───────┐
+│      Item      │ Value │
+├────────────────┼───────┤
+│ Directory      │ .     │
+│ Total Files    │ 67    │
+│ Language Files │ 41    │
+│ Excluded Files │ 26    │
+└────────────────┴───────┘
 
 === Language Statistics ===
 ┌────────────┬───────┬────────────┐
 │ Language   │ Files │ Percentage │
 ├────────────┼───────┼────────────┤
-│ TypeScript │ 2978  │ 57.7%      │
-│ JavaScript │ 926   │ 17.9%      │
-│ HTML       │ 146   │ 2.8%       │
-│ Svelte     │ 43    │ 0.8%       │
-│ Vue        │ 41    │ 0.8%       │
-│ Astro      │ 20    │ 0.4%       │
-│ CSS        │ 16    │ 0.3%       │
-│ Shell      │ 9     │ 0.2%       │
+│ Rust       │ 19    │ 46.3%      │
+│ JavaScript │ 4     │ 9.8%       │
+│ TypeScript │ 4     │ 9.8%       │
+│ C++        │ 3     │ 7.3%       │
+│ HTML       │ 2     │ 4.9%       │
+│ SCSS       │ 2     │ 4.9%       │
+│ Shell      │ 1     │ 2.4%       │
+│ Go         │ 1     │ 2.4%       │
+│ CSS        │ 1     │ 2.4%       │
+│ C          │ 1     │ 2.4%       │
+│ PHP        │ 1     │ 2.4%       │
+│ Ruby       │ 1     │ 2.4%       │
+│ Python     │ 1     │ 2.4%       │
 └────────────┴───────┴────────────┘
 ```
 
