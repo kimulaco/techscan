@@ -27,29 +27,30 @@ brew install techscan
 ### Scan programming languages
 
 ```bash
-techscan lang ./project
+techscan lang .
 
-Processing directory: /Users/kimulaco/project
-
+Processing directory: .
 === Scan Summary ===
-┌─────────────┬─────────────────────────────────────────┐
-│    Item     │                  Value                  │
-├─────────────┼─────────────────────────────────────────┤
-│ Directory   │ /Users/kimulaco/project │
-│ Total Files │ 5160                                    │
-└─────────────┴─────────────────────────────────────────┘
+┌────────────────┬───────┐
+│      Item      │ Value │
+├────────────────┼───────┤
+│ Directory      │   .   │
+│ Total Files    │ 5160  │
+│ Language Files │ 4179  │
+│ Excluded Files │  981  │
+└────────────────┴───────┘
 
 === Language Statistics ===
 ┌────────────┬───────┬────────────┐
 │ Language   │ Files │ Percentage │
 ├────────────┼───────┼────────────┤
-│ TypeScript │ 2978  │ 57.7%      │
-│ JavaScript │ 926   │ 17.9%      │
-│ HTML       │ 146   │ 2.8%       │
-│ Svelte     │ 43    │ 0.8%       │
-│ Vue        │ 41    │ 0.8%       │
-│ Astro      │ 20    │ 0.4%       │
-│ CSS        │ 16    │ 0.3%       │
+│ TypeScript │ 2978  │ 71.3%      │
+│ JavaScript │ 926   │ 22.2%      │
+│ HTML       │ 146   │ 3.5%       │
+│ Svelte     │ 43    │ 1.0%       │
+│ Vue        │ 41    │ 1.0%       │
+│ Astro      │ 20    │ 0.5%       │
+│ CSS        │ 16    │ 0.4%       │
 │ Shell      │ 9     │ 0.2%       │
 └────────────┴───────┴────────────┘
 ```
