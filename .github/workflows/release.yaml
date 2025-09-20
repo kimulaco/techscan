@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+            platform: linux
+            arch: x64
+          - target: x86_64-apple-darwin
+            os: macos-latest
+            platform: darwin
+            arch: x64
+          - target: aarch64-apple-darwin
+            os: macos-latest
+            platform: darwin
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # v1
+        with:
+          toolchain: "1.82.0"
+          targets: ${{ matrix.target }}
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
+      - name: Create binary name
+        id: binary
+        run: |
+          echo "name=techscan" >> $GITHUB_OUTPUT
+          echo "archive=techscan-${{ matrix.platform }}-${{ matrix.arch }}.tar.gz" >> $GITHUB_OUTPUT
+      - name: Create archive
+        run: |
+          cd target/${{ matrix.target }}/release
+          tar czf ../../../${{ steps.binary.outputs.archive }} ${{ steps.binary.outputs.name }}
+      - name: Generate checksums
+        run: |
+          sha256sum ${{ steps.binary.outputs.archive }} > ${{ steps.binary.outputs.archive }}.sha256
+          echo "SHA256 checksum for ${{ steps.binary.outputs.archive }}:"
+          cat ${{ steps.binary.outputs.archive }}.sha256
+      - name: Upload release assets
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2.3.3
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: |
+            ${{ steps.binary.outputs.archive }}
+            ${{ steps.binary.outputs.archive }}.sha256
