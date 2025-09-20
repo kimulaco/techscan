@@ -73,11 +73,8 @@ impl LanguageReporter {
         lang_builder.push_record(vec!["Language", "Files", "Percentage"]);
 
         for lang_report in &report.languages {
-            let percentage = if detected_files_count > 0 {
-                (lang_report.file_count as f64 / detected_files_count as f64) * 100.0
-            } else {
-                0.0
-            };
+            let percentage =
+                Self::calculate_percentage(lang_report.file_count, detected_files_count);
             lang_builder.push_record(vec![
                 lang_report.language.name,
                 &lang_report.file_count.to_string(),
@@ -99,6 +96,14 @@ impl LanguageReporter {
         output.push(lang_table);
 
         Ok(output.join("\n"))
+    }
+
+    fn calculate_percentage(file_count: u64, detected_total_files_count: u64) -> f64 {
+        if detected_total_files_count > 0 {
+            (file_count as f64 / detected_total_files_count as f64) * 100.0
+        } else {
+            0.0
+        }
     }
 }
 
@@ -202,5 +207,17 @@ mod tests {
 
         assert!(table_output.contains("60.0%"));
         assert!(table_output.contains("40.0%"));
+    }
+
+    #[test]
+    fn test_calculate_percentage() {
+        assert_eq!(LanguageReporter::calculate_percentage(30, 100), 30.0);
+        assert!((LanguageReporter::calculate_percentage(1, 3) - 33.333333333333336).abs() < 0.0001);
+
+        assert_eq!(LanguageReporter::calculate_percentage(5, 0), 0.0);
+
+        assert_eq!(LanguageReporter::calculate_percentage(0, 100), 0.0);
+
+        assert_eq!(LanguageReporter::calculate_percentage(50, 50), 100.0);
     }
 }
