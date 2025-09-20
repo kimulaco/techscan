@@ -15,6 +15,13 @@
 cargo install techscan
 ```
 
+### Homebrew
+
+```bash
+brew tap kimulaco/techscan
+brew install techscan
+```
+
 ## CLI
 
 ### Scan programming languages
@@ -61,12 +68,12 @@ CLI arguments take precedence over configuration file options.
 
 #### Options
 
-| Option | Short | Description | Default | Example |
-|--------|-------|-------------|---------|---------|
-| `--reporter` | `-r` | Output format: `table`, `json` | `table` | `--reporter json` |
-| `--exclude` | `-e` | Exclude path patterns (can be used multiple times) | - | `--exclude "*.test.ts"` |
-| `--config` | `-c` | Configuration file path | - | `--config techscan.json` |
-| `--version` |  | Display techscan version | - | `--version` |
+| Option       | Short | Description                                        | Default | Example                  |
+| ------------ | ----- | -------------------------------------------------- | ------- | ------------------------ |
+| `--reporter` | `-r`  | Output format: `table`, `json`                     | `table` | `--reporter json`        |
+| `--exclude`  | `-e`  | Exclude path patterns (can be used multiple times) | -       | `--exclude "*.test.ts"`  |
+| `--config`   | `-c`  | Configuration file path                            | -       | `--config techscan.json` |
+| `--version`  |       | Display techscan version                           | -       | `--version`              |
 
 #### Examples
 
@@ -96,10 +103,10 @@ techscan lang ./project --config techscan.json --exclude "node_modules"
 
 #### Options
 
-| Setting | Type | Description | Default | Example |
-|---------|------|-------------|---------|---------|
-| `exclude` | Array of strings | File patterns to exclude from analysis | `[]` (none) | `["*.test.*", "dist"]` |
-| `reporter` | String | Output format (`"table"` or `"json"`) | `"table"` | `"json"` |
+| Setting    | Type             | Description                            | Default     | Example                |
+| ---------- | ---------------- | -------------------------------------- | ----------- | ---------------------- |
+| `exclude`  | Array of strings | File patterns to exclude from analysis | `[]` (none) | `["*.test.*", "dist"]` |
+| `reporter` | String           | Output format (`"table"` or `"json"`)  | `"table"`   | `"json"`               |
 
 #### Examples
 
