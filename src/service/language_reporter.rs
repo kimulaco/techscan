@@ -54,7 +54,7 @@ impl LanguageReporter {
             .map(|lang_report| lang_report.file_count)
             .sum();
 
-        let excluded_files_count = report.total_file_count - detected_files_count;
+        let excluded_files_count = report.total_file_count.saturating_sub(detected_files_count);
 
         let mut summary_builder = Builder::default();
         summary_builder.push_record(vec!["Item", "Value"]);
