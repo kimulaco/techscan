@@ -56,3 +56,15 @@ jobs:
           files: |
             ${{ steps.binary.outputs.archive }}
             ${{ steps.binary.outputs.archive }}.sha256
+
+  dispatch-homebrew-formula-update:
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment: Homebrew
+    steps:
+      - name: Dispatch Homebrew Formula Update
+        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
+        with:
+          token: ${{ secrets.HOMEBREW_DISPATCH_TOKEN }}
+          repository: kimulaco/homebrew-techscan
+          event-type: new-release
