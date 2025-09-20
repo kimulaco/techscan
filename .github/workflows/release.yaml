@@ -1,0 +1,45 @@
+name: Release
+
+# TODO:Change release trigger
+on:
+  push:
+    branches:
+      - issue-15
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
+          - target: x86_64-apple-darwin
+            os: macos-latest
+          - target: aarch64-apple-darwin
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # v1
+        with:
+          toolchain: "1.82.0"
+          targets: ${{ matrix.target }}
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
+      - name: Create archive
+        run: |
+          cd target/${{ matrix.target }}/release
+          tar czf ../../../techscan-${{ matrix.target }}.tar.gz techscan
+      - name: Generate checksums
+        run: |
+          sha256sum techscan-${{ matrix.target }}.tar.gz > techscan-${{ matrix.target }}.tar.gz.sha256
+          echo "SHA256 checksum for techscan-${{ matrix.target }}.tar.gz:"
+          cat techscan-${{ matrix.target }}.tar.gz.sha256
+      - name: Upload artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: techscan-${{ matrix.target }}
+          path: techscan-${{ matrix.target }}.*
