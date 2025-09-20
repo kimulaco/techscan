@@ -74,6 +74,6 @@ jobs:
       - name: Dispatch Homebrew Formula Update
         uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
         with:
-          token: ${{ secrets.HOMEBREW_DISPATCH_TOKEN }}
+          token: ${{ secrets.HOMEBREW_TECHSCAN_DISPATCH_TOKEN }}
           repository: kimulaco/homebrew-techscan
           event-type: new-release
