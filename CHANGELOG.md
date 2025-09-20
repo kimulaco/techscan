@@ -1,10 +1,19 @@
 # Changelog
 
+## [1.0.1] - 2025-09-20
+
+**No changes to the core library or CLI functionality.**
+
+### Added
+
+- Added Homebrew installation support: `brew tap kimulaco/techscan && brew install techscan`
+
 ## [1.0.0] - 2025-09-05
 
 ### Breaking changes
 
 - Migrate language scanning to the `language` (`lang`) subcommand. [#5](https://github.com/kimulaco/techscan/issues/5)
+
   ```bash
   # before
   techscan scan_dir_path
