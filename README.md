@@ -34,29 +34,24 @@ Processing directory: .
 ┌────────────────┬───────┐
 │      Item      │ Value │
 ├────────────────┼───────┤
-│ Directory      │ .     │
-│ Total Files    │ 67    │
-│ Language Files │ 41    │
-│ Excluded Files │ 26    │
+│ Directory      │   .   │
+│ Total Files    │ 5160  │
+│ Language Files │ 4179  │
+│ Excluded Files │  981  │
 └────────────────┴───────┘
 
 === Language Statistics ===
 ┌────────────┬───────┬────────────┐
 │ Language   │ Files │ Percentage │
 ├────────────┼───────┼────────────┤
-│ Rust       │ 19    │ 46.3%      │
-│ JavaScript │ 4     │ 9.8%       │
-│ TypeScript │ 4     │ 9.8%       │
-│ C++        │ 3     │ 7.3%       │
-│ HTML       │ 2     │ 4.9%       │
-│ SCSS       │ 2     │ 4.9%       │
-│ Shell      │ 1     │ 2.4%       │
-│ Go         │ 1     │ 2.4%       │
-│ CSS        │ 1     │ 2.4%       │
-│ C          │ 1     │ 2.4%       │
-│ PHP        │ 1     │ 2.4%       │
-│ Ruby       │ 1     │ 2.4%       │
-│ Python     │ 1     │ 2.4%       │
+│ TypeScript │ 2978  │ 71.3%      │
+│ JavaScript │ 926   │ 22.2%      │
+│ HTML       │ 146   │ 3.5%       │
+│ Svelte     │ 43    │ 1.0%       │
+│ Vue        │ 41    │ 1.0%       │
+│ Astro      │ 20    │ 0.5%       │
+│ CSS        │ 16    │ 0.4%       │
+│ Shell      │ 9     │ 0.2%       │
 └────────────┴───────┴────────────┘
 ```
 
