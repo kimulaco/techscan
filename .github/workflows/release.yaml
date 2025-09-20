@@ -1,10 +1,11 @@
 name: Release
 
-# TODO:Change release trigger
 on:
-  push:
-    branches:
-      - issue-15
+  release:
+    types: [created]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -13,15 +14,20 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
+            platform: linux
+            arch: x64
           - target: x86_64-apple-darwin
             os: macos-latest
+            platform: darwin
+            arch: x64
           - target: aarch64-apple-darwin
             os: macos-latest
+            platform: darwin
+            arch: arm64
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@e97e2d8cc328f1b50210efc529dca0028893a2d9 # v1
         with:
@@ -29,17 +35,35 @@ jobs:
           targets: ${{ matrix.target }}
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
+      - name: Create binary name
+        id: binary
+        run: |
+          echo "name=techscan" >> $GITHUB_OUTPUT
+          echo "archive=techscan-${{ matrix.platform }}-${{ matrix.arch }}.tar.gz" >> $GITHUB_OUTPUT
       - name: Create archive
         run: |
           cd target/${{ matrix.target }}/release
-          tar czf ../../../techscan-${{ matrix.target }}.tar.gz techscan
+          tar czf ../../../${{ steps.binary.outputs.archive }} ${{ steps.binary.outputs.name }}
       - name: Generate checksums
         run: |
-          sha256sum techscan-${{ matrix.target }}.tar.gz > techscan-${{ matrix.target }}.tar.gz.sha256
-          echo "SHA256 checksum for techscan-${{ matrix.target }}.tar.gz:"
-          cat techscan-${{ matrix.target }}.tar.gz.sha256
-      - name: Upload artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+          sha256sum ${{ steps.binary.outputs.archive }} > ${{ steps.binary.outputs.archive }}.sha256
+          echo "SHA256 checksum for ${{ steps.binary.outputs.archive }}:"
+          cat ${{ steps.binary.outputs.archive }}.sha256
+      - name: Upload release assets
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: techscan-${{ matrix.target }}
-          path: techscan-${{ matrix.target }}.*
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./${{ steps.binary.outputs.archive }}
+          asset_name: ${{ steps.binary.outputs.archive }}
+          asset_content_type: application/octet-stream
+      - name: Upload checksum
+        uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./${{ steps.binary.outputs.archive }}.sha256
+          asset_name: ${{ steps.binary.outputs.archive }}.sha256
+          asset_content_type: text/plain
