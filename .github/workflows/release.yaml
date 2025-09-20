@@ -8,7 +8,16 @@ permissions:
   contents: write
 
 jobs:
+  check_pinact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: suzuki-shunsuke/pinact-action@d735505f3decf76fca3fdbb4c952e5b3eba0ffdd # v0.1.2
+        with:
+          skip_push: "true"
+
   build:
+    needs: [check_pinact]
     strategy:
       matrix:
         include:
@@ -56,3 +65,15 @@ jobs:
           files: |
             ${{ steps.binary.outputs.archive }}
             ${{ steps.binary.outputs.archive }}.sha256
+
+  dispatch-homebrew-formula-update:
+    needs: [build]
+    runs-on: ubuntu-latest
+    environment: Homebrew
+    steps:
+      - name: Dispatch Homebrew Formula Update
+        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0 # v3.0.0
+        with:
+          token: ${{ secrets.HOMEBREW_DISPATCH_TOKEN }}
+          repository: kimulaco/homebrew-techscan
+          event-type: new-release
