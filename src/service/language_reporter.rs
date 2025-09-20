@@ -48,10 +48,20 @@ impl LanguageReporter {
     fn to_table(&self, report: &LanguageReport) -> io::Result<String> {
         let mut output = Vec::new();
 
+        let detected_files_count: u64 = report
+            .languages
+            .iter()
+            .map(|lang_report| lang_report.file_count)
+            .sum();
+
+        let excluded_files_count = report.total_file_count - detected_files_count;
+
         let mut summary_builder = Builder::default();
         summary_builder.push_record(vec!["Item", "Value"]);
         summary_builder.push_record(vec!["Directory", &report.dir]);
         summary_builder.push_record(vec!["Total Files", &report.total_file_count.to_string()]);
+        summary_builder.push_record(vec!["Language Files", &detected_files_count.to_string()]);
+        summary_builder.push_record(vec!["Excluded Files", &excluded_files_count.to_string()]);
 
         let summary_table = summary_builder
             .build()
@@ -63,8 +73,11 @@ impl LanguageReporter {
         lang_builder.push_record(vec!["Language", "Files", "Percentage"]);
 
         for lang_report in &report.languages {
-            let percentage =
-                (lang_report.file_count as f64 / report.total_file_count as f64) * 100.0;
+            let percentage = if detected_files_count > 0 {
+                (lang_report.file_count as f64 / detected_files_count as f64) * 100.0
+            } else {
+                0.0
+            };
             lang_builder.push_record(vec![
                 lang_report.language.name,
                 &lang_report.file_count.to_string(),
@@ -150,5 +163,44 @@ mod tests {
 
         assert_eq!(parsed["dir"], "/test/path");
         assert_eq!(parsed["total_file_count"], 5);
+    }
+
+    #[test]
+    fn test_percentage_excludes_unknown_files() {
+        let reporter = LanguageReporter::new();
+
+        let rust_lang = Language {
+            name: "Rust",
+            exts: &["rs"],
+        };
+        let js_lang = Language {
+            name: "JavaScript",
+            exts: &["js"],
+        };
+
+        let report = LanguageReport {
+            dir: "/test/path".to_string(),
+            total_file_count: 100,
+            languages: vec![
+                LanguageReportItem {
+                    language: rust_lang,
+                    file_count: 30,
+                    file_paths: vec![],
+                },
+                LanguageReportItem {
+                    language: js_lang,
+                    file_count: 20,
+                    file_paths: vec![],
+                },
+            ],
+        };
+
+        let result = reporter.to_table(&report);
+        assert!(result.is_ok());
+
+        let table_output = result.unwrap();
+
+        assert!(table_output.contains("60.0%"));
+        assert!(table_output.contains("40.0%"));
     }
 }
